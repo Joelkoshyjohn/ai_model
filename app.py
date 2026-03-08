@@ -1,25 +1,24 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-from fastapi.middleware.cors import CORSMiddleware
 import joblib
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-# Allow requests from any origin
-origins = ["*"]
-
+# Enable CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],  # Allow all origins (for testing)
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Load model
+# Load model and vectorizer
 model = joblib.load("model.pkl")
 vectorizer = joblib.load("vectorizer.pkl")
 
+# Request format
 class Review(BaseModel):
     text: str
 
@@ -37,8 +36,10 @@ def predict(review: Review):
     prediction = model.predict(review_vector)[0]
     probability = model.predict_proba(review_vector)[0][1]
 
+    result = "Fake Review" if prediction == 1 else "Genuine Review"
+
     return {
         "review": review.text,
-        "prediction": int(prediction),
+        "prediction": result,
         "ai_probability": float(probability)
     }
