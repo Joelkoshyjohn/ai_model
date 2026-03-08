@@ -17,7 +17,7 @@ if review.isupper():
     print("Fake Review")
     exit()
 
-# Extreme fake patterns learned from dataset
+# Fake patterns
 fake_patterns = [
     "most perfect place ever",
     "best experience of my life",
@@ -29,7 +29,6 @@ fake_patterns = [
     "everything was absolutely amazing"
 ]
 
-# Rule-based detection from patterns
 for pattern in fake_patterns:
     if pattern in review_lower:
         print("Fake Review")
@@ -40,7 +39,6 @@ X = vectorizer.transform([review])
 
 prob = model.predict_proba(X)[0][1]
 
-# High threshold to avoid false positives
 if prob > 0.90:
     print("Fake Review")
 else:
