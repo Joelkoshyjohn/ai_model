@@ -5,10 +5,12 @@ import joblib
 
 app = FastAPI()
 
-# Enable CORS
+# Allow requests from any origin
+origins = ["*"]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],   # allow all origins (good for testing)
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -21,9 +23,11 @@ vectorizer = joblib.load("vectorizer.pkl")
 class Review(BaseModel):
     text: str
 
+
 @app.get("/")
 def home():
-    return {"message": "AI Review Detector Running"}
+    return {"message": "Fake Review Detection API Running"}
+
 
 @app.post("/predict")
 def predict(review: Review):
