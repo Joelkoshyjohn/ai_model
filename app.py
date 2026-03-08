@@ -36,7 +36,8 @@ def predict(review: Review):
     prediction = model.predict(review_vector)[0]
     probability = model.predict_proba(review_vector)[0][1]
 
-    result = "Fake Review" if prediction == 1 else "Genuine Review"
+    result = "Fake Review" if probability > 0.90 else "Genuine Review"
+
 
     return {
         "review": review.text,
